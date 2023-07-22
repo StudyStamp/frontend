@@ -1,41 +1,36 @@
 import React from 'react';
 import {
-  ChakraProvider,
   Box,
   Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
 } from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Logo } from './Logo';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+// import Dashboard from './Pages/Dashboard';
+import { useSelector } from 'react-redux';
+import NotFound from './Pages/NotFound';
+import Login from './Pages/Login';
+import Dashboard from './Pages/Dashboard';
+import Navbar from './components/Navbar';
 
 function App() {
+  const auth = useSelector(state => state.auth.auth);
+  console.log(auth);
   return (
-    <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
-      </Box>
-    </ChakraProvider>
+    <>
+      <Router>
+        {auth && <Navbar />}
+        <Routes>
+          <Route path="/" element={auth ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+          {
+            auth ? <>
+              <Route path='/dashboard' element={<Dashboard />} />
+            </> : <>
+              <Route path='/login' element={<Login />} />
+            </>
+          }
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
