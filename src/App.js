@@ -18,7 +18,9 @@ function App() {
     <>
       <Router>
         {auth && <Navbar />}
+        {/* <Navbar /> */}
         <Routes>
+          {/* <Route path='/dashboard' element={<Dashboard />} /> */}
           <Route path="/" element={auth ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
           {
             auth ? <>
